@@ -9,9 +9,9 @@ type FileInfo struct {
 	Size         int64
 }
 
-func GetHeaviestFiles(fileMap map[string]int64, limit int) []FileInfo {
-	fileInfos := make([]FileInfo, len(fileMap))
-	for absPath, size := range fileMap {
+func GetHeaviestFiles(dirSizeMap map[string]int64, limit int) []FileInfo {
+	fileInfos := make([]FileInfo, len(dirSizeMap))
+	for absPath, size := range dirSizeMap {
 		fileInfo := FileInfo{
 			AbsolutePath: absPath,
 			Size:         size,

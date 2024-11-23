@@ -11,11 +11,11 @@ func main() {
 
 	args := cli.ParseArgs()
 
-	var fileMap = make(map[string]int64)
+	var dirSizeMap = make(map[string]int64)
 
-	cmd.ScanDir(*args, &fileMap)
+	cmd.ScanDir(args.Path, &dirSizeMap)
 
-	topFiles := utils.GetHeaviestFiles(fileMap, args.Limit)
+	topFiles := utils.GetHeaviestFiles(dirSizeMap, args.Limit)
 
 	presenters.PresentAsJson(topFiles)
 }

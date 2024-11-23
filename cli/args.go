@@ -14,7 +14,7 @@ type Args struct {
 
 func ParseArgs() *Args {
 	path := flag.String("path", "", "Directory to scan for files")
-	ignoreSize := flag.Int64("ignore-size", 1024*1024, "Ignore files smaller than this size in bytes")
+	//ignoreSize := flag.Int64("ignore-size", 1024*1024, "Ignore files smaller than this size in bytes")
 	limit := flag.Int("limit", 10, "Number of files to display")
 	flag.Parse()
 
@@ -23,10 +23,10 @@ func ParseArgs() *Args {
 		os.Exit(1)
 	}
 
-	if *ignoreSize <= 0 {
-		fmt.Println("The \"-ignore-size\" flag must be greater than 0")
-		os.Exit(1)
-	}
+	//if *ignoreSize <= 0 {
+	//	fmt.Println("The \"-ignore-size\" flag must be greater than 0")
+	//	os.Exit(1)
+	//}
 
 	if *limit <= 0 {
 		fmt.Println("The \"-limit\" flag must be greater than 0")
@@ -34,8 +34,8 @@ func ParseArgs() *Args {
 	}
 
 	return &Args{
-		Path:       *path,
-		IgnoreSize: *ignoreSize,
-		Limit:      *limit,
+		Path: *path,
+		//IgnoreSize: *ignoreSize,
+		Limit: *limit,
 	}
 }

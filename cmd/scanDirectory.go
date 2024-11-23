@@ -3,33 +3,53 @@ package cmd
 import (
 	"os"
 	"path/filepath"
-	"who-ate-my-space/cli"
 	"who-ate-my-space/utils"
 )
 
-func ScanDir(args cli.Args, fileMap *map[string]int64) {
-	files, err := os.ReadDir(args.Path)
-	if err != nil {
+func ScanDir(path string, dirSizeMap *map[string]int64) {
+	processDirectory(path, dirSizeMap)
+}
+
+func processDirectory(path string, dirSizeMap *map[string]int64) {
+	if utils.CheckIsPathExcluded(path) {
 		return
 	}
 
+	totalSize := int64(0)
+	files := listDirContents(path)
+
 	for _, file := range files {
-		absolutePath := filepath.Join(args.Path, file.Name())
+		absolutePath := filepath.Join(path, file.Name())
 
-		if file.IsDir() && !utils.CheckIsPathExcluded(absolutePath) {
-			ScanDir(cli.Args{
-				Path:       absolutePath,
-				IgnoreSize: args.IgnoreSize,
-			}, fileMap)
+		if file.IsDir() {
+			childDirSize := processSubdirectory(absolutePath, dirSizeMap)
+			totalSize += childDirSize
 		} else {
-			fileInfo, err := os.Stat(absolutePath)
-			if err != nil {
-				continue
-			}
-
-			if fileInfo.Size() > args.IgnoreSize {
-				(*fileMap)[absolutePath] = fileInfo.Size()
-			}
+			fileSize := getFileSize(absolutePath)
+			totalSize += fileSize
 		}
 	}
+
+	(*dirSizeMap)[path] = totalSize
+}
+
+func listDirContents(path string) []os.DirEntry {
+	files, err := os.ReadDir(path)
+	if err != nil {
+		return nil
+	}
+	return files
+}
+
+func processSubdirectory(path string, dirSizeMap *map[string]int64) int64 {
+	processDirectory(path, dirSizeMap)
+	return (*dirSizeMap)[path]
+}
+
+func getFileSize(path string) int64 {
+	fileInfo, err := os.Stat(path)
+	if err != nil || fileInfo.IsDir() {
+		return 0
+	}
+	return fileInfo.Size()
 }
