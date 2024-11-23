@@ -7,12 +7,19 @@ import (
 	"who-ate-my-space/utils"
 )
 
-func PresentAsJson(dirInfos []utils.DirInfo) {
+func roundToTwoDecimalPlaces(num float64) float64 {
+	return float64(int(num*100)) / 100
+}
+
+func PresentAsJson(dirInfos []utils.ExtendedDirInfo) {
 	formattedDirData := make([]map[string]interface{}, 0)
 	for _, dirInfo := range dirInfos {
 		jsonDirInfo := map[string]interface{}{
-			"absolute_path": dirInfo.AbsolutePath,
-			"size":          dirInfo.Size,
+			"absolute_path":  dirInfo.AbsolutePath,
+			"size_gigabytes": dirInfo.SizeGB,
+			"size_megabytes": dirInfo.SizeMB,
+			"size_kilobytes": dirInfo.SizeKB,
+			"size_bytes":     dirInfo.SizeB,
 		}
 		formattedDirData = append(formattedDirData, jsonDirInfo)
 	}
