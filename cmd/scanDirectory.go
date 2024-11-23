@@ -16,9 +16,9 @@ func processDirectory(path string, dirSizeMap *map[string]int64) {
 	}
 
 	totalSize := int64(0)
-	files := listDirContents(path)
+	dirs := listDirContents(path)
 
-	for _, file := range files {
+	for _, file := range dirs {
 		absolutePath := filepath.Join(path, file.Name())
 
 		if file.IsDir() {
@@ -34,11 +34,11 @@ func processDirectory(path string, dirSizeMap *map[string]int64) {
 }
 
 func listDirContents(path string) []os.DirEntry {
-	files, err := os.ReadDir(path)
+	dirs, err := os.ReadDir(path)
 	if err != nil {
 		return nil
 	}
-	return files
+	return dirs
 }
 
 func processSubdirectory(path string, dirSizeMap *map[string]int64) int64 {

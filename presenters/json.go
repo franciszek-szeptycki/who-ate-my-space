@@ -6,21 +6,17 @@ import (
 	"who-ate-my-space/utils"
 )
 
-func PresentAsJson(fileInfos []utils.FileInfo) {
-	jsonFileInfos := make([]map[string]interface{}, 0)
-	for _, fileInfo := range fileInfos {
-		jsonFileInfo := map[string]interface{}{
-			"absolute_path": fileInfo.AbsolutePath,
-			"size":          fileInfo.Size,
+func PresentAsJson(dirInfos []utils.DirInfo) {
+	jsonFormattedDirData := make([]map[string]interface{}, 0)
+	for _, dirInfo := range dirInfos {
+		jsonDirInfo := map[string]interface{}{
+			"absolute_path": dirInfo.AbsolutePath,
+			"size":          dirInfo.Size,
 		}
-		jsonFileInfos = append(jsonFileInfos, jsonFileInfo)
+		jsonFormattedDirData = append(jsonFormattedDirData, jsonDirInfo)
 	}
 
-	jsonBody := map[string]interface{}{
-		"files": jsonFileInfos,
-	}
-
-	jsonOutput, err := json.Marshal(jsonBody)
+	jsonOutput, err := json.Marshal(jsonFormattedDirData)
 	if err != nil {
 		fmt.Printf("error: %v", err)
 		return

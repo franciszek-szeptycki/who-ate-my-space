@@ -15,7 +15,7 @@ func main() {
 
 	cmd.ScanDir(args.Path, &dirSizeMap)
 
-	topFiles := utils.GetHeaviestFiles(dirSizeMap, args.Limit)
+	preparedResults := utils.PrepareResults(dirSizeMap, args.Limit)
 
-	presenters.PresentAsJson(topFiles)
+	presenters.PresentAsJson(preparedResults)
 }
