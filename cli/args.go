@@ -13,13 +13,23 @@ type Args struct {
 }
 
 func ParseArgs() *Args {
-	path := flag.String("path", "/var", "Directory to scan for files")
+	path := flag.String("path", "", "Directory to scan for files")
 	ignoreSize := flag.Int64("ignore-size", 1024*1024, "Ignore files smaller than this size in bytes")
 	limit := flag.Int("limit", 10, "Number of files to display")
 	flag.Parse()
 
-	if _, err := os.Stat(*path); os.IsNotExist(err) {
-		fmt.Printf("The provided path does not exist: %s\n", *path)
+	if *path == "" {
+		fmt.Println("The \"-path\" flag is required")
+		os.Exit(1)
+	}
+
+	if *ignoreSize <= 0 {
+		fmt.Println("The \"-ignore-size\" flag must be greater than 0")
+		os.Exit(1)
+	}
+
+	if *limit <= 0 {
+		fmt.Println("The \"-limit\" flag must be greater than 0")
 		os.Exit(1)
 	}
 
