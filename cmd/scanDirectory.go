@@ -4,6 +4,7 @@ import (
 	"os"
 	"path/filepath"
 	"who-ate-my-space/cli"
+	"who-ate-my-space/utils"
 )
 
 func ScanDir(args cli.Args, fileMap *map[string]int64) {
@@ -15,7 +16,7 @@ func ScanDir(args cli.Args, fileMap *map[string]int64) {
 	for _, file := range files {
 		absolutePath := filepath.Join(args.Path, file.Name())
 
-		if file.IsDir() {
+		if file.IsDir() && !utils.CheckIsPathExcluded(absolutePath) {
 			ScanDir(cli.Args{
 				Path:       absolutePath,
 				IgnoreSize: args.IgnoreSize,
